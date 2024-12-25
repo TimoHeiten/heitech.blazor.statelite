@@ -1,46 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 
 namespace heitech.blazor.statelite
 {
     /// <summary>
-    /// Creates a store by name - allows for multiple simultaneously
-    /// </summary>
-    public static class StateLiteFactory
-    {
-        private static readonly Dictionary<string, IStateLite> Stores = new Dictionary<string, IStateLite>();
-        private static readonly SemaphoreSlim Semaphore = new SemaphoreSlim(1, 1);
-        /// <summary>
-        /// Creates a singleton instance of the IStateLite store
-        /// </summary>
-        /// <returns></returns>
-        public static IStateLite Get(string name)
-        {
-            Semaphore.Wait();
-            try
-            {
-                if (Stores.TryGetValue(name, out var store1))
-                {
-                    return store1;
-                }
-
-                var store = new StateLiteCore();
-                Stores.Add(name, store);
-                return store;
-            }
-            finally
-            {
-                Semaphore.Release();
-            }
-        }
-    }
-
-    /// <summary>
     /// LiteDb based in memory store
     /// </summary>
-    public interface IStateLite
+    public interface IStateLite : IDisposable
     {
         /// <summary>
         /// the underlying memory stream for the Database 
@@ -100,5 +67,10 @@ namespace heitech.blazor.statelite
         /// </summary>
         /// <param name="writerCallback"></param>
         void Dump(Action<string> writerCallback);
+
+        /// <summary>
+        /// Clears all data from this store - effectively a reset - not a dispose
+        /// </summary>
+        void Purge();
     }
 }

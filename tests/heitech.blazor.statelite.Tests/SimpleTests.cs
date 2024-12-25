@@ -4,34 +4,33 @@ namespace heitech.blazor.statelite.Tests;
 
 public sealed class SimpleTests
 {
-    private readonly IStateLite _state;
-    public SimpleTests()
-    {
-        _state = StateLiteFactory.Get("test");
-    }
+    private static IStateLite CreateSut(string name = "test")
+        => StateLiteFactory.Get(name);
 
     [Fact]
     public void Store_And_Retrieve()
     {
         // Arrange
-        var obj = CreateAndInsert();
+        using var sut = CreateSut(nameof(Store_And_Retrieve));
+        var obj = CreateAndInsert(sut);
 
         // Act
-        var result = _state.GetById<ObjectOne>(obj.Id);
+        var result = sut.GetById<ObjectOne>(obj.Id);
 
         // Assert
         result.Should().BeEquivalentTo(obj);
     }
-    
+
     [Fact]
     public void Store_And_Delete()
     {
         // Arrange
-        var obj = CreateAndInsert();
+        using var sut = CreateSut(nameof(Store_And_Delete));
+        var obj = CreateAndInsert(sut);
 
         // Act
-        _state.Delete(obj);
-        var result = _state.GetById<ObjectOne>(obj.Id);
+        sut.Delete(obj);
+        var result = sut.GetById<ObjectOne>(obj.Id);
 
         // Assert
         result.Should().BeNull();
@@ -41,12 +40,13 @@ public sealed class SimpleTests
     public void Store_Multiple_and_GetAll()
     { 
         // Arrange
-        CreateAndInsert();
-        CreateAndInsert();
-        CreateAndInsert();
+        using var sut = CreateSut(nameof(Store_Multiple_and_GetAll));
+        CreateAndInsert(sut);
+        CreateAndInsert(sut);
+        CreateAndInsert(sut);
 
         // Act
-        var all = _state.GetAll<ObjectOne>();
+        var all = sut.GetAll<ObjectOne>();
 
         // Assert
         all.Should().HaveCount(3);
@@ -56,21 +56,38 @@ public sealed class SimpleTests
     public void FindByComplexFilter()
     {
         // Arrange 
+        using var sut = CreateSut(nameof(FindByComplexFilter));
         var objectOnes = Enumerable.Range(0, 5).Select(CreateOne).ToList();
         var coll = new ComplexObject(Guid.NewGuid(), objectOnes);
-        _state.Insert(coll);
+        sut.Insert(coll);
 
         // Act
-        var result = _state.Query<ComplexObject>(x => x.ObjectOnes.Any());
+        var result = sut.Query<ComplexObject>(x => x.ObjectOnes.Any());
 
         // Assert
         result.Single().Should().BeEquivalentTo(coll);
     }
 
-    private ObjectOne CreateAndInsert(ObjectOne? one = null)
+    [Fact]
+    public void Purge_returns_empty_Collection()
+    {
+        // Arrange
+        using var sut = CreateSut(nameof(Purge_returns_empty_Collection));
+        CreateAndInsert(sut);
+        CreateAndInsert(sut);
+        CreateAndInsert(sut);
+
+        // Act
+        sut.Purge();
+
+        // Assert
+        sut.GetAll<ObjectOne>().Should().BeEmpty();
+    }
+
+    private ObjectOne CreateAndInsert(IStateLite lite, ObjectOne? one = null)
     {
         var oneToInsert = one ?? CreateOne();
-        _state.Insert(oneToInsert);
+        lite.Insert(oneToInsert);
         return oneToInsert;
     }
 

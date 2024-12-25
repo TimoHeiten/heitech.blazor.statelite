@@ -11,8 +11,8 @@ namespace heitech.blazor.statelite
     /// </summary>
     internal sealed class StateLiteCore : IStateLite
     {
-        private readonly MemoryStream _dbStream;
-        private readonly LiteDatabase _database;
+        private MemoryStream _dbStream;
+        private LiteDatabase _database;
 
         private HashSet<Type> _collections = new HashSet<Type>();
         
@@ -34,7 +34,12 @@ namespace heitech.blazor.statelite
 
         public void Dump(Action<string> writerCallback)
         {
-            // get all collections and dump to the cb
+            foreach (var type in _collections)
+            {
+                var allFromType = _database.GetCollection(type.Name).FindAll();
+                var asOneString = string.Join(Environment.NewLine, allFromType);
+                writerCallback(asOneString);
+            }
         }
 
         public void Insert<T>(T record)
@@ -76,6 +81,18 @@ namespace heitech.blazor.statelite
         {
             var c = _database.GetCollection<T>(CollectionName<T>());
             return c.FindAll().Where(filter);
+        }
+
+        public void Purge()
+        {
+            _dbStream = new MemoryStream();
+            _database = new LiteDatabase(_dbStream);
+        }
+
+        public void Dispose()
+        {
+            _dbStream.Dispose();
+            _database?.Dispose();
         }
     }
 }
