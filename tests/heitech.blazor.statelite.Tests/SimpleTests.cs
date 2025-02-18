@@ -4,8 +4,8 @@ namespace heitech.blazor.statelite.Tests;
 
 public sealed class SimpleTests
 {
-    private static IStateLite CreateSut(string name = "test")
-        => StateLiteFactory.Get(name);
+    private static IStateLite<Guid> CreateSut(string name = "test")
+        => StateLiteFactory.Get<Guid>(name);
 
     [Fact]
     public void Store_And_Retrieve()
@@ -84,7 +84,39 @@ public sealed class SimpleTests
         sut.GetAll<ObjectOne>().Should().BeEmpty();
     }
 
-    private ObjectOne CreateAndInsert(IStateLite lite, ObjectOne? one = null)
+    [Fact]
+    public void Insert_And_Delete_All()
+    {
+        // Arrange
+        using var sut = CreateSut(nameof(Insert_And_Delete_All));
+        var o1 = CreateAndInsert(sut);
+        _ = CreateAndInsert(sut);
+        _ = CreateAndInsert(sut);
+
+        // Act
+        sut.Delete(o1);
+
+        // Assert
+        sut.GetAll<ObjectOne>().Should().HaveCount(2);
+    }
+
+    [Fact]
+    public void Insert_And_Delete_By_Key()
+    {
+        // Arrange
+        using var sut = CreateSut(nameof(Insert_And_Delete_By_Key));
+        var o1 = CreateAndInsert(sut);
+        var o2 = CreateAndInsert(sut);
+        var o3 = CreateAndInsert(sut);
+
+        // Act
+        sut.Delete(o1.Id);
+
+        // Assert
+        sut.GetAll<ObjectOne>().Should().HaveCount(2);
+    }
+
+    private ObjectOne CreateAndInsert(IStateLite<Guid> lite, ObjectOne? one = null)
     {
         var oneToInsert = one ?? CreateOne();
         lite.Insert(oneToInsert);
@@ -94,6 +126,17 @@ public sealed class SimpleTests
     private static ObjectOne CreateOne(int i = 0)
         => new(Guid.NewGuid(), $"key-{i}", $"value- {i}");
 
-    private sealed record ObjectOne(Guid Id, string Key, string Value) : IHasId;
-    private sealed record ComplexObject(Guid Id, List<ObjectOne> ObjectOnes) : IHasId;
+    private sealed record ObjectOne(Guid Id, string Key, string Value) : IHasId<Guid>
+    {
+        public ObjectOne() : this(Guid.Empty, string.Empty, string.Empty)
+        { }
+    }
+
+    private sealed record ComplexObject(Guid Id, List<ObjectOne> ObjectOnes) : IHasId<Guid>
+    {
+        public ComplexObject() : this(Guid.Empty, new List<ObjectOne>(0))
+        {
+            
+        }
+    }
 }

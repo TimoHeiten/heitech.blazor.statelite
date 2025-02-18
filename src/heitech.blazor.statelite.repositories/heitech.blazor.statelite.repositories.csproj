@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>12</LangVersion>
+
+        <Authors>heitech</Authors>
+        <PackageId>heitech.blazor.statelite.repositories</PackageId>
+        <Version>1.0.0</Version>
+        <Description>(Blazor) and managed store with feedback via callbacks</Description>
+        <PackageTags>blazor;inMemory;state</PackageTags>
+        <RepositoryUrl>https://github.com/TimoHeiten/heitech.blazor.statelite</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\heitech.blazor.statelite\heitech.blazor.statelite.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>heitech.blazor.statelite.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+</Project>

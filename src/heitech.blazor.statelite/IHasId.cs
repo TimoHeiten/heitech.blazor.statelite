@@ -5,8 +5,8 @@ namespace heitech.blazor.statelite
     /// <summary>
     /// Defines the ids as guids for the store
     /// </summary>
-    public interface IHasId
+    public interface IHasId<T>
     {
-        Guid Id { get; }
+        T Id { get; }
     }
 }

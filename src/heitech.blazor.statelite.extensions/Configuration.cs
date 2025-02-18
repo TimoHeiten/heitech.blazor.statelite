@@ -10,6 +10,7 @@ public static class Configuration
     /// </summary>
     /// <param name="serviceCollection"></param>
     /// <returns></returns>
-    public static IServiceCollection AddStateLite(this IServiceCollection serviceCollection)
-        => serviceCollection.AddSingleton<IStateLite, StateLiteCore>();
+    public static IServiceCollection AddStateLite<TKey>(this IServiceCollection serviceCollection)
+        where TKey : IEquatable<TKey>
+        => serviceCollection.AddSingleton<IStateLite<TKey>, StateLiteCore<TKey>>();
 }
