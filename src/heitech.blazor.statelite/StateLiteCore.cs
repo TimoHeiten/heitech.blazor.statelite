@@ -17,6 +17,8 @@ namespace heitech.blazor.statelite
 
         private HashSet<Type> _collections = new HashSet<Type>();
         
+        private string[] _collectionNames => _database.GetCollectionNames().ToArray();
+
         public StateLiteCore()
         {
             _dbStream = new MemoryStream();
@@ -35,10 +37,15 @@ namespace heitech.blazor.statelite
 
         public void Delete(TKey key)
         {
-            foreach (var type in _collections)
+            foreach (var collectionName in _collectionNames)
             {
-                var collection = _database.GetCollection(type.Name);
-                collection.Delete(new BsonValue(key));
+                var collection = _database.GetCollection(collectionName);
+                var obj = collection.FindById(new BsonValue(key));
+
+                if (obj is null)
+                    continue;
+
+                collection.Delete(obj["_id"]);
             }
         }
 

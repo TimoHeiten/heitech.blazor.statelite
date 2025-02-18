@@ -1,13 +1,10 @@
 ﻿namespace heitech.blazor.statelite.repositories;
 
-internal sealed class MangedStore<TKey>
+internal sealed class MangedState<TKey>(string storeName) : IManagedState<TKey>
     where TKey : IEquatable<TKey>
 {
-    public IStateLite<TKey> Store { get; }
-    private readonly List<ISubscriber<TKey>> _subscribers = new();
-
-    public MangedStore(string storeName)
-        => Store = StateLiteFactory.Get<TKey>(storeName);
+    public IStateLite<TKey> Store { get; } = StateLiteFactory.Get<TKey>(storeName);
+    private List<ISubscriber<TKey>> _subscribers = new();
 
     public void Subscribe(ISubscriber<TKey> subscriber)
     {
@@ -16,9 +13,11 @@ internal sealed class MangedStore<TKey>
 
         _subscribers.Add(subscriber);
     }
-    
+
     public void Unsubscribe(ISubscriber<TKey> subscriber)
-        => _subscribers.Remove(subscriber);
+    {
+        _subscribers = _subscribers.Where(x => !ReferenceEquals(x, subscriber)).ToList();
+    }
 
     public IEnumerable<T> CurrentItems<T>()
         where T : IHasId<TKey>, new()
@@ -56,7 +55,7 @@ internal sealed class MangedStore<TKey>
     private void NotifyChanges<T>()
         where T : IHasId<TKey>, new()
     {
-        var refreshed = CurrentItems<T>();
+        var refreshed = CurrentItems<T>().ToArray();
         _subscribers.ForEach(s => s.OnChanges(refreshed));
     }
 }

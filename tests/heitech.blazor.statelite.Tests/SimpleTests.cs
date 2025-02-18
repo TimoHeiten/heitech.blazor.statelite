@@ -84,6 +84,38 @@ public sealed class SimpleTests
         sut.GetAll<ObjectOne>().Should().BeEmpty();
     }
 
+    [Fact]
+    public void Insert_And_Delete_All()
+    {
+        // Arrange
+        using var sut = CreateSut(nameof(Insert_And_Delete_All));
+        var o1 = CreateAndInsert(sut);
+        _ = CreateAndInsert(sut);
+        _ = CreateAndInsert(sut);
+
+        // Act
+        sut.Delete(o1);
+
+        // Assert
+        sut.GetAll<ObjectOne>().Should().HaveCount(2);
+    }
+
+    [Fact]
+    public void Insert_And_Delete_By_Key()
+    {
+        // Arrange
+        using var sut = CreateSut(nameof(Insert_And_Delete_By_Key));
+        var o1 = CreateAndInsert(sut);
+        var o2 = CreateAndInsert(sut);
+        var o3 = CreateAndInsert(sut);
+
+        // Act
+        sut.Delete(o1.Id);
+
+        // Assert
+        sut.GetAll<ObjectOne>().Should().HaveCount(2);
+    }
+
     private ObjectOne CreateAndInsert(IStateLite<Guid> lite, ObjectOne? one = null)
     {
         var oneToInsert = one ?? CreateOne();

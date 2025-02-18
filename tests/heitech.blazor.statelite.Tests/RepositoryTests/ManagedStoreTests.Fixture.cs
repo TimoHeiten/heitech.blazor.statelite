@@ -38,9 +38,9 @@ public sealed partial class ManagedStoreTests
     {
         public void OnChanges<T>(IEnumerable<T> items) where T : IHasId<int>, new()
         {
-            LastChanges = (items as IEnumerable<Entities>)!;
+            LatestChanges = (items as IEnumerable<Entities>)!;
         }
 
-        public IEnumerable<Entities> LastChanges { get; private set; } = null!;
+        public IEnumerable<Entities> LatestChanges { get; private set; } = null!;
     }
 }
