@@ -19,7 +19,7 @@ dotnet test
 checkExitCode "Test failed"
 
 # create package without build
-dotnet pack .\src\heitech-fluent-cli\heitech-fluent-cli.csproj -c Release
+dotnet pack .\src\heitech.blazor.statelite\heitech.blazor.statelite.csproj -c Release
 
 # publish package
-dotnet nuget push .\src\heitech-fluent-cli\bin\Release\heitech-fluent-cli.2.2.0.nupkg --api-key $apiKey --source https://api.nuget.org/v3/index.json
+dotnet nuget push .\src\heitech.blazor.statelite\bin\Release\heitech.blazor.statelite.1.0.0.nupkg --api-key $apiKey --source https://api.nuget.org/v3/index.json

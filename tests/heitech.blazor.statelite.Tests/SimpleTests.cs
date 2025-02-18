@@ -4,8 +4,8 @@ namespace heitech.blazor.statelite.Tests;
 
 public sealed class SimpleTests
 {
-    private static IStateLite CreateSut(string name = "test")
-        => StateLiteFactory.Get(name);
+    private static IStateLite<Guid> CreateSut(string name = "test")
+        => StateLiteFactory.Get<Guid>(name);
 
     [Fact]
     public void Store_And_Retrieve()
@@ -84,7 +84,7 @@ public sealed class SimpleTests
         sut.GetAll<ObjectOne>().Should().BeEmpty();
     }
 
-    private ObjectOne CreateAndInsert(IStateLite lite, ObjectOne? one = null)
+    private ObjectOne CreateAndInsert(IStateLite<Guid> lite, ObjectOne? one = null)
     {
         var oneToInsert = one ?? CreateOne();
         lite.Insert(oneToInsert);
@@ -94,6 +94,6 @@ public sealed class SimpleTests
     private static ObjectOne CreateOne(int i = 0)
         => new(Guid.NewGuid(), $"key-{i}", $"value- {i}");
 
-    private sealed record ObjectOne(Guid Id, string Key, string Value) : IHasId;
-    private sealed record ComplexObject(Guid Id, List<ObjectOne> ObjectOnes) : IHasId;
+    private sealed record ObjectOne(Guid Id, string Key, string Value) : IHasId<Guid>;
+    private sealed record ComplexObject(Guid Id, List<ObjectOne> ObjectOnes) : IHasId<Guid>;
 }
