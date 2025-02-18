@@ -25,5 +25,11 @@ public sealed class TestWithStringKey
         one.Name.Should().Be("name2");
     }
 
-    private sealed record MyRecord(string Id, string Name) : IHasId<string>;
+    private sealed record MyRecord(string Id, string Name) : IHasId<string>
+    {
+        public MyRecord() : this("", "")
+        {
+            
+        }
+    }
 }

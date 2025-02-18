@@ -94,6 +94,17 @@ public sealed class SimpleTests
     private static ObjectOne CreateOne(int i = 0)
         => new(Guid.NewGuid(), $"key-{i}", $"value- {i}");
 
-    private sealed record ObjectOne(Guid Id, string Key, string Value) : IHasId<Guid>;
-    private sealed record ComplexObject(Guid Id, List<ObjectOne> ObjectOnes) : IHasId<Guid>;
+    private sealed record ObjectOne(Guid Id, string Key, string Value) : IHasId<Guid>
+    {
+        public ObjectOne() : this(Guid.Empty, string.Empty, string.Empty)
+        { }
+    }
+
+    private sealed record ComplexObject(Guid Id, List<ObjectOne> ObjectOnes) : IHasId<Guid>
+    {
+        public ComplexObject() : this(Guid.Empty, new List<ObjectOne>(0))
+        {
+            
+        }
+    }
 }

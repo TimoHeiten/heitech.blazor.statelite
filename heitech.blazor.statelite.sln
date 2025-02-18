@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.blazor.statelite.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.blazor.statelite.extensions", "src\heitech.blazor.statelite.extensions\heitech.blazor.statelite.extensions.csproj", "{479E6A0F-616B-4582-96CC-A8C2B9C21780}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.blazor.statelite.repositories", "src\heitech.blazor.statelite.repositories\heitech.blazor.statelite.repositories.csproj", "{DDE89647-29EC-4956-950A-8D6B43412AB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,10 +36,15 @@ Global
 		{479E6A0F-616B-4582-96CC-A8C2B9C21780}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{479E6A0F-616B-4582-96CC-A8C2B9C21780}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{479E6A0F-616B-4582-96CC-A8C2B9C21780}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDE89647-29EC-4956-950A-8D6B43412AB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDE89647-29EC-4956-950A-8D6B43412AB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDE89647-29EC-4956-950A-8D6B43412AB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDE89647-29EC-4956-950A-8D6B43412AB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{308DCE62-9AF9-46B7-BAE7-AA77AAF40705} = {1B7F8319-3555-483E-8E31-292530A08B9D}
 		{63089C9A-01AF-408F-9863-1327A607A350} = {D2F5982F-A80A-4273-9E19-236FA9D96B22}
 		{479E6A0F-616B-4582-96CC-A8C2B9C21780} = {1B7F8319-3555-483E-8E31-292530A08B9D}
+		{DDE89647-29EC-4956-950A-8D6B43412AB6} = {1B7F8319-3555-483E-8E31-292530A08B9D}
 	EndGlobalSection
 EndGlobal

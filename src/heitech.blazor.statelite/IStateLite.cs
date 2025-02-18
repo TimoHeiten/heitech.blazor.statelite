@@ -19,7 +19,7 @@ namespace heitech.blazor.statelite
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         IEnumerable<T> GetAll<T>()
-            where T : IHasId<TKey>;
+            where T : IHasId<TKey>, new();
 
         /// <summary>
         /// Find by id. Can be null.
@@ -27,7 +27,7 @@ namespace heitech.blazor.statelite
         /// <param name="id"></param>
         /// <typeparam name="T"></typeparam>
         T GetById<T>(TKey id)
-            where T : IHasId<TKey>;
+            where T : IHasId<TKey>, new();
         
         /// <summary>
         /// Find by filter expression. Result can be empty 
@@ -36,7 +36,7 @@ namespace heitech.blazor.statelite
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         IEnumerable<T> Query<T>(Func<T, bool> filter)
-            where T : IHasId<TKey>;
+            where T : IHasId<TKey>, new();
 
         /// <summary>
         /// Replaces the record
@@ -44,7 +44,7 @@ namespace heitech.blazor.statelite
         /// <param name="record"></param>
         /// <typeparam name="T"></typeparam>
         void Replace<T>(T record)
-            where T : IHasId<TKey>;
+            where T : IHasId<TKey>, new();
 
         /// <summary>
         /// Inserts a record
@@ -52,7 +52,7 @@ namespace heitech.blazor.statelite
         /// <param name="record"></param>
         /// <typeparam name="T"></typeparam>
         void Insert<T>(T record)
-            where T : IHasId<TKey>;
+            where T : IHasId<TKey>, new();
         
         /// <summary>
         /// Remove a record (if exists)
@@ -60,7 +60,13 @@ namespace heitech.blazor.statelite
         /// <param name="record"></param>
         /// <typeparam name="T"></typeparam>
         void Delete<T>(T record)
-            where T : IHasId<TKey>;
+            where T : IHasId<TKey>, new();
+
+        /// <summary>
+        /// Remove a record via key (if exists)
+        /// </summary>
+        /// <param name="key"></param>
+        void Delete(TKey key);
 
         /// <summary>
         /// Debugger help for dumping the database to an output

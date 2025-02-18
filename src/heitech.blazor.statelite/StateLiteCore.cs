@@ -27,10 +27,19 @@ namespace heitech.blazor.statelite
         public MemoryStream DatabaseStream => _dbStream;
 
         public IEnumerable<T> GetAll<T>()
-            where T : IHasId<TKey>
+            where T : IHasId<TKey>, new()
         {
             var collection = _database.GetCollection<T>(CollectionName<T>());
             return collection.FindAll();
+        }
+
+        public void Delete(TKey key)
+        {
+            foreach (var type in _collections)
+            {
+                var collection = _database.GetCollection(type.Name);
+                collection.Delete(new BsonValue(key));
+            }
         }
 
         public void Dump(Action<string> writerCallback)
@@ -44,14 +53,14 @@ namespace heitech.blazor.statelite
         }
 
         public void Insert<T>(T record)
-            where T : IHasId<TKey>
+            where T : IHasId<TKey>, new()
         {
             _collections.Add(typeof(T));
             var collection = _database.GetCollection<T>(CollectionName<T>());
             collection.Insert(record);
         }
 
-        public void Delete<T>(T record) where T : IHasId<TKey>
+        public void Delete<T>(T record) where T : IHasId<TKey>, new()
         {
             var collection = _database.GetCollection<T>(CollectionName<T>());
             var bsonValue = new BsonValue(record.Id); 
@@ -59,12 +68,15 @@ namespace heitech.blazor.statelite
         }
 
         public void Replace<T>(T record)
-            where T : IHasId<TKey>
+            where T : IHasId<TKey>, new()
         {
             var collection = _database.GetCollection<T>(CollectionName<T>());
-            var byId = collection.FindOne(x => x.Id.Equals(record.Id));
+            var id = new BsonValue(record.Id);
+            
+            var byId = collection.FindOne("_id = @0", new BsonDocument { ["0"] = id });
             if (byId == null)
             {
+                collection.Insert(record);
                 return;
             }
 
@@ -73,14 +85,14 @@ namespace heitech.blazor.statelite
         }
 
         public T GetById<T>(TKey id)
-            where T : IHasId<TKey>
+            where T : IHasId<TKey>, new()
         {
             var result = Query<T>(x => x.Id.Equals(id)).ToList();
             return result.Any() ? result[0] : default;
         }
 
         public IEnumerable<T> Query<T>(Func<T, bool> filter)
-            where T : IHasId<TKey>
+            where T : IHasId<TKey>, new()
         {
             var c = _database.GetCollection<T>(CollectionName<T>());
             return c.FindAll().Where(filter);
