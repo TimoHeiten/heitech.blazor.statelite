@@ -15,11 +15,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.blazor.statelite.ex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.blazor.statelite.repositories", "src\heitech.blazor.statelite.repositories\heitech.blazor.statelite.repositories.csproj", "{DDE89647-29EC-4956-950A-8D6B43412AB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.blazor.stateXt", "heitech.blazor.stateXt\heitech.blazor.stateXt.csproj", "{84870A99-D45F-4E4C-AE9E-26CD424BFCE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.blazor.stateXt", "src\heitech.blazor.stateXt\heitech.blazor.stateXt.csproj", "{84870A99-D45F-4E4C-AE9E-26CD424BFCE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.blazor.stateXt.extensions", "heitech.blazor.stateXt.extensions\heitech.blazor.stateXt.extensions.csproj", "{D7933B66-B2A6-4395-A4D1-626BB24215A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.blazor.stateXt.extensions", "src\heitech.blazor.stateXt.extensions\heitech.blazor.stateXt.extensions.csproj", "{D7933B66-B2A6-4395-A4D1-626BB24215A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.blazor.stateXt.tests", "heitech.blazor.stateXt.tests\heitech.blazor.stateXt.tests.csproj", "{A8D7FB65-0CF3-4F4D-A52D-9261DB6B2CBB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech.blazor.stateXt.tests", "tests\heitech.blazor.stateXt.tests\heitech.blazor.stateXt.tests.csproj", "{A8D7FB65-0CF3-4F4D-A52D-9261DB6B2CBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
