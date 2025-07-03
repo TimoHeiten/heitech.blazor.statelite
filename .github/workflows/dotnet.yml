@@ -7,7 +7,7 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  build:
+  build-state-lite:
 
     runs-on: ubuntu-latest
 
@@ -16,7 +16,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 9.0.x
     - name: Restore dependencies
       run: dotnet restore ./src/heitech.blazor.statelite/heitech.blazor.statelite.csproj
     - name: Build
@@ -31,8 +31,40 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 9.0.x
     - name: Restore dependencies
       run: dotnet restore ./src/heitech.blazor.statelite/heitech.blazor.statelite.csproj
     - name: Test
       run: dotnet test
+
+  build-state-xt:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 9.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./src/heitech.blazor.stateXt/heitech.blazor.stateXt.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/heitech.blazor.stateXt/heitech.blazor.stateXt.csproj
+
+  test-xt:
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 9.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./tests/heitech.blazor.stateXt.tests/heitech.blazor.stateXt.tests.csproj
+    - name: Test
+      run: dotnet test
+
+ 
