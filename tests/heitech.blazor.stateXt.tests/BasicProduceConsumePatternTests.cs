@@ -5,6 +5,28 @@ namespace heitech.blazor.stateXt.tests;
 public sealed partial class BasicProduceConsumePatternTests
 {
     [Fact]
+    public async Task Parallel_Set_Subscribe_And_Unsubscribe_All_Works_Without_Error()
+    {
+        // Arrange        
+        var (producer, consumer) = ArrangeSut();
+        TestStateObject propInComponent = null!;
+        
+        // Act
+        await Task.WhenAll(new List<Task>() 
+                {
+                    consumer.SubscribeAsync(newState => propInComponent = newState, _fakeComponentAsReceiver),
+                    producer.SetValue(new TestStateObject(42, "test state")),
+                    producer.SetValue(null!),
+                    producer.SetValue(new TestStateObject(48, "test state")),
+                    Task.Run(() => consumer.Unsubscribe(_fakeComponentAsReceiver))
+                } 
+        );
+
+        // Assert
+        AssertTestState(propInComponent, 48);
+    }
+    
+    [Fact]
     public async Task Add_Consumer_And_Produce_Value_Updates()
     {
         // Arrange        
