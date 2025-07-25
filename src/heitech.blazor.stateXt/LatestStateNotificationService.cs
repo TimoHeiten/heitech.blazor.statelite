@@ -14,7 +14,7 @@ namespace heitech.blazor.stateXt
     {
         private T _value;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
-        private ConcurrentBag<Subscriber> _subscribers = new ConcurrentBag<Subscriber>();
+        private List<Subscriber> _subscribers = new List<Subscriber>();
 
         public T Value => _value;
 
@@ -53,7 +53,7 @@ namespace heitech.blazor.stateXt
             _semaphore.Wait();
             try
             {
-                _subscribers = new ConcurrentBag<Subscriber>(_subscribers.Where(x => x.Receiver != receiver).ToList());
+                _subscribers.RemoveAll(x => x.Receiver == receiver); 
             }
             finally
             {
