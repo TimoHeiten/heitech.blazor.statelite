@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace heitech.blazor.stateXt
@@ -11,7 +13,8 @@ namespace heitech.blazor.stateXt
     public abstract class LatestStateNotificationService<T> : IConsumeState<T>, IProduceState<T>
     {
         private T _value;
-        private readonly List<Subscriber> _subscribers = new List<Subscriber>();
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+        private List<Subscriber> _subscribers = new List<Subscriber>();
 
         public T Value => _value;
 
@@ -30,20 +33,46 @@ namespace heitech.blazor.stateXt
 
         public async Task SubscribeAsync(Callback<T> callback, object receiver)
         {
-            var subscriber = new Subscriber(callback, receiver);
-            _subscribers.Add(subscriber);
+            await _semaphore.WaitAsync();
+            try
+            {
+                var subscriber = new Subscriber(callback, receiver);
+                _subscribers.Add(subscriber);
+            }
+            finally 
+            {
+                _semaphore.Release();
+            }
 
             if (callback.HasDelegate)
                 await callback.InvokeAsync(_value);
         }
 
-        public void Unsubscribe(object receiver)
-            => _subscribers.RemoveAll(s => s.Receiver == receiver);
+        public async Task UnsubscribeAsync(object receiver)
+        {
+            await _semaphore.WaitAsync();
+            try
+            {
+                _subscribers.RemoveAll(x => x.Receiver == receiver); 
+            }
+            finally
+            {
+                _semaphore.Release();
+            } 
+        }
 
         private async Task NotifySubscribersAsync()
         {
-            var tasks = _subscribers.Where(x => x.Callback.HasDelegate).Select(x => x.Callback.InvokeAsync(_value));
-            await Task.WhenAll(tasks);
+            await _semaphore.WaitAsync();
+            try
+            {
+                var tasks = _subscribers.ToList().Where(x => x.Callback.HasDelegate).Select(x => x.Callback.InvokeAsync(_value));
+                await Task.WhenAll(tasks);
+            }
+            finally 
+            {
+                _semaphore.Release();
+            }
         }
 
         public Task SubscribeAsync(Action<T> action, object receiver)

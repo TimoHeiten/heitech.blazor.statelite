@@ -29,7 +29,7 @@ namespace heitech.blazor.stateXt
         /// Remove this receiver from receiving updates 
         /// </summary>
         /// <param name="receiver"></param>
-        void Unsubscribe(object receiver);
+        Task UnsubscribeAsync(object receiver);
     }
 
     /// <summary>
