@@ -48,9 +48,9 @@ namespace heitech.blazor.stateXt
                 await callback.InvokeAsync(_value);
         }
 
-        public void Unsubscribe(object receiver)
+        public async Task UnsubscribeAsync(object receiver)
         {
-            _semaphore.Wait();
+            await _semaphore.WaitAsync();
             try
             {
                 _subscribers.RemoveAll(x => x.Receiver == receiver); 

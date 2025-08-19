@@ -18,7 +18,7 @@ public sealed partial class BasicProduceConsumePatternTests
                     producer.SetValue(new TestStateObject(42, "test state")),
                     producer.SetValue(null!),
                     producer.SetValue(new TestStateObject(48, "test state")),
-                    Task.Run(() => consumer.Unsubscribe(_fakeComponentAsReceiver))
+                    consumer.UnsubscribeAsync(_fakeComponentAsReceiver)
                 } 
         );
 
@@ -51,7 +51,7 @@ public sealed partial class BasicProduceConsumePatternTests
         await consumer.SubscribeAsync(newState => propInComponent = newState, _fakeComponentAsReceiver);
         
         // Act
-        consumer.Unsubscribe(_fakeComponentAsReceiver);
+        await consumer.UnsubscribeAsync(_fakeComponentAsReceiver);
         await producer.SetValue(new TestStateObject(42, "test state"));
 
         // Assert
